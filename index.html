@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>L'Aura Café & Roastery</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- React & Babel Standalone CDNs -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts: Playfair Display & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Playfair Display', serif;
+    }
+    .font-sans {
+      font-family: 'Inter', sans-serif !important;
+    }
+    .font-serif {
+      font-family: 'Playfair Display', serif !important;
+    }
+  </style>
+</head>
+<body class="bg-[#FBF9F5]">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // Helper to render Lucide icons in React without bundlers
+    const Icon = ({ name, className = "w-4 h-4", ...props }) => {
+      const ref = useRef(null);
+
+      useEffect(() => {
+        if (ref.current && window.lucide) {
+          ref.current.innerHTML = '';
+          const i = document.createElement('i');
+          i.setAttribute('data-lucide', name);
+          ref.current.appendChild(i);
+          window.lucide.createIcons({
+            root: ref.current,
+            nameAttr: 'data-lucide',
+            attrs: {
+              class: className
+            }
+          });
+        }
+      }, [name, className]);
+
+      return <span ref={ref} className="inline-flex items-center justify-center" {...props}></span>;
+    };
+
+    const MENU_ITEMS = [
+      {
+        id: 'c1',
+        name: 'Smoked Vanilla Cortado',
+        category: 'coffee',
+        price: 5.75,
+        tag: "Barista's Pick",
+        description: 'Double shot of single-origin Ethiopian espresso balanced with equal parts silky steamed oat milk and house-smoked vanilla bean syrup.',
+        notes: ['Velvety Bourbon Vanilla', 'Dried Fig', 'Dark Cocoa'],
+        dietary: ['Vegan Friendly', 'House Specialty'],
+        image: 'https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=700&q=80',
+        prepTime: '4 mins'
+      },
+      {
+        id: 'c2',
+        name: 'Cardamom & Rose Velvet Latte',
+        category: 'coffee',
+        price: 6.25,
+        tag: 'Signature',
+        description: 'Slow-extracted espresso infused with crushed green cardamom pods, steamed milk, and organic Damascus rose water mist.',
+        notes: ['Floral Rose Petal', 'Warm Cardamom', 'Sweet Brioche'],
+        dietary: ['Vegetarian', 'Oat / Almond Option'],
+        image: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=700&q=80',
+        prepTime: '5 mins'
+      },
+      {
+        id: 'c3',
+        name: 'Kyoto-Style 12hr Cold Drip',
+        category: 'coffee',
+        price: 6.50,
+        tag: 'Limited Batch',
+        description: 'Slowly brewed drop by drop over twelve hours using ice and washed Colombian Geisha beans, served over a hand-carved ice sphere.',
+        notes: ['Jasmine Blossom', 'Bergamot', 'Peach Nectar'],
+        dietary: ['Gluten Free', 'Zero Added Sugar'],
+        image: 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=700&q=80',
+        prepTime: 'Ready'
+      },
+      {
+        id: 't1',
+        name: 'Wild Cloud Mist Matcha',
+        category: 'tea',
+        price: 6.00,
+        tag: 'Ceremonial Grade',
+        description: 'First harvest Uji ceremonial matcha hand-whisked with bamboo chasen, layered over chilled sweetened oat milk with a hint of yuzu zest.',
+        notes: ['Umami Grassiness', 'Subtle Citrus', 'Creamy Finish'],
+        dietary: ['Organic', 'Vegan', 'Superfood'],
+        image: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=700&q=80',
+        prepTime: '4 mins'
+      },
+      {
+        id: 't2',
+        name: 'Smoked Lavender Earl Grey',
+        category: 'tea',
+        price: 5.25,
+        tag: 'Calming',
+        description: 'Full leaf bergamot black tea steeped with dried French lavender florets and finished with warm whipped vanilla cream.',
+        notes: ['French Lavender', 'Calabrian Bergamot', 'Woodsmoke Honey'],
+        dietary: ['Contains Caffeine', 'Relaxing'],
+        image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=700&q=80',
+        prepTime: '5 mins'
+      },
+      {
+        id: 'p1',
+        name: 'Brown Butter Hazelnut Croissant',
+        category: 'bakery',
+        price: 4.80,
+        tag: 'Fresh Baked',
+        description: '72-layer laminated French butter dough rolled with roasted Piedmont hazelnut praline and dusted with Maldon sea salt.',
+        notes: ['Nutty Crunch', 'Flaky Caramelized Shell', 'Melted Core'],
+        dietary: ['Contains Tree Nuts', 'Vegetarian'],
+        image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=700&q=80',
+        prepTime: 'Bakery fresh daily'
+      },
+      {
+        id: 'p2',
+        name: 'Pistachio Orange Blossom Brioche',
+        category: 'bakery',
+        price: 5.50,
+        tag: 'Guest Favorite',
+        description: 'Pillowy sourdough brioche bun stuffed with pistachio cream curd and drizzled with candied Valencia orange syrup.',
+        notes: ['Bright Citrus', 'Crushed Sicilian Pistachio', 'Tender Crumb'],
+        dietary: ['Vegetarian'],
+        image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=80',
+        prepTime: 'Bakery fresh daily'
+      },
+      {
+        id: 'b1',
+        name: 'Truffled Wild Mushroom Sourdough',
+        category: 'brunch',
+        price: 14.50,
+        tag: 'Warm Plate',
+        description: 'Pan-seared chanterelles, cremini, and oyster mushrooms flambéed with thyme on toasted country loaf with whipped goat cheese and poached egg.',
+        notes: ['Earthy Umami', 'Creamy Chevre', 'Runny Yolk'],
+        dietary: ['Vegetarian', 'Nut-Free'],
+        image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=700&q=80',
+        prepTime: '12 mins'
+      },
+      {
+        id: 'b2',
+        name: 'Ricotta Hotcakes & Roasted Figs',
+        category: 'brunch',
+        price: 13.75,
+        tag: 'Brunch Special',
+        description: 'Fluffy whole milk ricotta pancakes layered with rosemary-roasted Black Mission figs, honey honeycomb crumble, and whipped mascarpone.',
+        notes: ['Caramelized Figs', 'Citrus Zest', 'Whipped Cream'],
+        dietary: ['Vegetarian'],
+        image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=700&q=80',
+        prepTime: '14 mins'
+      }
+    ];
+
+    const GALLERY_MOMENTS = [
+      {
+        id: 1,
+        title: 'Morning Sunbeams & First Pours',
+        caption: '7:45 AM / The quiet ritual before the world wakes.',
+        rotation: '-rotate-2',
+        image: 'https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=600&q=80',
+        tag: 'Window Bar'
+      },
+      {
+        id: 2,
+        title: 'The Courtyard Fig Tree',
+        caption: 'Dappled afternoon shade with a book and cold drip.',
+        rotation: 'rotate-3',
+        image: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=600&q=80',
+        tag: 'Courtyard'
+      },
+      {
+        id: 3,
+        title: 'Daily Hearth Loaves',
+        caption: 'Slow fermented for 36 hours. Cracking crust warm to the touch.',
+        rotation: '-rotate-1',
+        image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80',
+        tag: 'Bakery Hearth'
+      },
+      {
+        id: 4,
+        title: 'Vinyl & Coffee Grounds',
+        caption: 'Lo-fi beats, gentle chatter, and the scent of freshly ground Geisha.',
+        rotation: 'rotate-2',
+        image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80',
+        tag: 'Living Lounge'
+      }
+    ];
+
+    const PHILOSOPHY_PILLARS = [
+      {
+        title: 'Single-Estate Sourcing',
+        desc: 'We roast microlots from multi-generational family farms with regenerative agroforestry practices in Huila, Yirgacheffe, and Antigua.'
+      },
+      {
+        title: 'Slow Fermentation Hearth',
+        desc: 'Our bakery uses local stone-milled ancient grains and wild sourdough starters nurtured across eight continuous years.'
+      },
+      {
+        title: 'The Art of Lingering',
+        desc: 'No rush timers, warm tactile ceramics by local potters, and corner nooks created strictly for quiet thoughts and conversations.'
+      }
+    ];
+
+    function App() {
+      const [selectedCategory, setSelectedCategory] = useState('all');
+      const [activeModalItem, setActiveModalItem] = useState(null);
+      const [isReserveOpen, setIsReserveOpen] = useState(false);
+      const [reservationSuccess, setReservationSuccess] = useState(false);
+      const [cart, setCart] = useState([]);
+      const [isCartOpen, setIsCartOpen] = useState(false);
+      const [favorites, setFavorites] = useState(['c1', 'p1']);
+      const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+      const [audioMode, setAudioMode] = useState('lofi');
+      const [notification, setNotification] = useState('');
+
+      const [reserveForm, setReserveForm] = useState({
+        name: '',
+        email: '',
+        date: '2026-10-06',
+        time: '10:30 AM',
+        guests: '2 Guests',
+        tableType: 'Window Nook with Natural Light',
+        note: ''
+      });
+
+      const audioCtxRef = useRef(null);
+      const rainNoiseNodeRef = useRef(null);
+      const lofiTimerRef = useRef(null);
+
+      useEffect(() => {
+        return () => stopAudio();
+      }, []);
+
+      const showToast = (msg) => {
+        setNotification(msg);
+        setTimeout(() => setNotification(''), 3200);
+      };
+
+      const initAndStartAudio = (mode = 'lofi') => {
+        try {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (!audioCtxRef.current) {
+            audioCtxRef.current = new AudioCtx();
+          }
+          if (audioCtxRef.current.state === 'suspended') {
+            audioCtxRef.current.resume();
+          }
+
+          stopAudio();
+          setAudioMode(mode);
+
+          if (mode === 'rain') {
+            const bufferSize = audioCtxRef.current.sampleRate * 2;
+            const noiseBuffer = audioCtxRef.current.createBuffer(1, bufferSize, audioCtxRef.current.sampleRate);
+            const output = noiseBuffer.getChannelData(0);
+            let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+            for (let i = 0; i < bufferSize; i++) {
+              const white = Math.random() * 2 - 1;
+              b0 = 0.99886 * b0 + white * 0.0555179;
+              b1 = 0.99332 * b1 + white * 0.0750759;
+              b2 = 0.96900 * b2 + white * 0.1538520;
+              b3 = 0.86650 * b3 + white * 0.3104856;
+              b4 = 0.55000 * b4 + white * 0.5329522;
+              b5 = -0.7616 * b5 - white * 0.0168980;
+              output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.04;
+              b6 = white * 0.115926;
+            }
+
+            const whiteNoise = audioCtxRef.current.createBufferSource();
+            whiteNoise.buffer = noiseBuffer;
+            whiteNoise.loop = true;
+
+            const filter = audioCtxRef.current.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 1000;
+
+            const gainNode = audioCtxRef.current.createGain();
+            gainNode.gain.setValueAtTime(0.35, audioCtxRef.current.currentTime);
+
+            whiteNoise.connect(filter);
+            filter.connect(gainNode);
+            gainNode.connect(audioCtxRef.current.destination);
+
+            whiteNoise.start();
+            rainNoiseNodeRef.current = whiteNoise;
+            setIsPlayingAudio(true);
+            showToast('🌧️ Gentle cafe courtyard rain playing');
+          } else {
+            const chords = [
+              [261.63, 329.63, 392.00, 493.88],
+              [220.00, 261.63, 329.63, 392.00],
+              [174.61, 220.00, 261.63, 329.63],
+              [196.00, 246.94, 293.66, 392.00]
+            ];
+            let chordIdx = 0;
+
+            const playWarmChime = () => {
+              if (!audioCtxRef.current) return;
+              const now = audioCtxRef.current.currentTime;
+              const currentChord = chords[chordIdx % chords.length];
+              chordIdx++;
+
+              currentChord.forEach((freq, i) => {
+                const osc = audioCtxRef.current.createOscillator();
+                const gain = audioCtxRef.current.createGain();
+                const filter = audioCtxRef.current.createBiquadFilter();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now + i * 0.08);
+
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(800, now);
+
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.04, now + 0.1 + i * 0.08);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 3.8);
+
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioCtxRef.current.destination);
+
+                osc.start(now + i * 0.08);
+                osc.stop(now + 4.0);
+              });
+            };
+
+            playWarmChime();
+            lofiTimerRef.current = setInterval(playWarmChime, 4500);
+            setIsPlayingAudio(true);
+            showToast('☕ Lo-fi acoustic warm chime lounge activated');
+          }
+        } catch (e) {
+          console.warn('Audio context restricted:', e);
+          showToast('Audio playback enabled upon first click');
+        }
+      };
+
+      const stopAudio = () => {
+        if (rainNoiseNodeRef.current) {
+          try { rainNoiseNodeRef.current.stop(); } catch(e) {}
+          rainNoiseNodeRef.current = null;
+        }
+        if (lofiTimerRef.current) {
+          clearInterval(lofiTimerRef.current);
+          lofiTimerRef.current = null;
+        }
+        setIsPlayingAudio(false);
+      };
+
+      const toggleAudio = (modeToUse) => {
+        if (isPlayingAudio && audioMode === modeToUse) {
+          stopAudio();
+          showToast('Ambient audio paused');
+        } else {
+          initAndStartAudio(modeToUse);
+        }
+      };
+
+      const addToCart = (item, e) => {
+        if (e) e.stopPropagation();
+        setCart(prev => {
+          const existing = prev.find(i => i.id === item.id);
+          if (existing) {
+            return prev.map(i => i.id === item.id ? { ...i, qty: i.qty + 1 } : i);
+          }
+          return [...prev, { ...item, qty: 1 }];
+        });
+        showToast(`Added ${item.name} to order`);
+      };
+
+      const updateCartQty = (id, delta) => {
+        setCart(prev => prev.map(item => {
+          if (item.id === id) {
+            const newQty = item.qty + delta;
+            return newQty > 0 ? { ...item, qty: newQty } : null;
+          }
+          return item;
+        }).filter(Boolean));
+      };
+
+      const toggleFavorite = (id, e) => {
+        if (e) e.stopPropagation();
+        setFavorites(prev => 
+          prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+        );
+      };
+
+      const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const cartItemCount = cart.reduce((sum, item) => sum + item.qty, 0);
+
+      const filteredItems = selectedCategory === 'all' 
+        ? MENU_ITEMS 
+        : MENU_ITEMS.filter(item => item.category === selectedCategory);
+
+      const handleReserveSubmit = (e) => {
+        e.preventDefault();
+        if (!reserveForm.name || !reserveForm.email) {
+          showToast('Please provide your name and email');
+          return;
+        }
+        setReservationSuccess(true);
+        setTimeout(() => {
+          setReservationSuccess(false);
+          setIsReserveOpen(false);
+          showToast(`✨ Table reserved for ${reserveForm.name} on ${reserveForm.date}`);
+        }, 1800);
+      };
+
+      return (
+        <div className="min-h-screen bg-[#FBF9F5] text-[#2C241E] font-serif antialiased selection:bg-[#E2D5C3] selection:text-[#2C241E] relative">
+          
+          {/* Toast Notification */}
+          {notification && (
+            <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-[#2D231C]/90 backdrop-blur-md text-[#F4EDE2] px-5 py-2.5 rounded-full text-xs font-sans tracking-wide shadow-xl flex items-center gap-2 border border-[#4A3B30] transition-all animate-bounce">
+              <Icon name="sparkles" className="w-3.5 h-3.5 text-[#E6AF75]" />
+              <span>{notification}</span>
+            </div>
+          )}
+
+          {/* Header */}
+          <header className="sticky top-0 z-40 bg-[#FBF9F5]/90 backdrop-blur-md border-b border-[#EDE6DC] transition-all">
+            <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#EFE8DE] flex items-center justify-center text-[#6A4E38] shadow-inner border border-[#DECDBB]">
+                  <Icon name="coffee" className="w-5 h-5 stroke-[1.75]" />
+                </div>
+                <div>
+                  <span className="text-xl md:text-2xl font-serif tracking-tight font-medium text-[#292019] block leading-none">
+                    L’Aura
+                  </span>
+                  <span className="text-[10px] tracking-[0.25em] font-sans uppercase text-[#887463]">
+                    Café & Roastery
+                  </span>
+                </div>
+              </div>
+
+              {/* Desktop Nav Links */}
+              <nav className="hidden md:flex items-center gap-8 text-sm font-sans tracking-wider text-[#5A4B40]">
+                <a href="#menu" className="hover:text-[#9B5C35] transition-colors">Menu</a>
+                <a href="#philosophy" className="hover:text-[#9B5C35] transition-colors">Philosophy</a>
+                <a href="#atmosphere" className="hover:text-[#9B5C35] transition-colors">Atmosphere</a>
+                <a href="#visit" className="hover:text-[#9B5C35] transition-colors">Hours & Location</a>
+              </nav>
+
+              {/* Action Hub */}
+              <div className="flex items-center gap-3">
+                <div className="relative group">
+                  <button 
+                    onClick={() => toggleAudio(audioMode === 'lofi' ? 'rain' : 'lofi')}
+                    className={`p-2.5 rounded-full text-xs font-sans transition-all flex items-center gap-1.5 border ${
+                      isPlayingAudio 
+                        ? 'bg-[#3A2B21] text-[#F3ECE2] border-[#3A2B21] shadow-md' 
+                        : 'bg-[#F2ECE3] text-[#55453A] border-[#E5DACD] hover:bg-[#E9DFD2]'
+                    }`}
+                    title="Toggle cafe atmosphere sounds"
+                  >
+                    {isPlayingAudio ? (
+                      <>
+                        <Icon name="volume-2" className="w-4 h-4 text-[#E6AF75]" />
+                        <span className="text-[11px] hidden sm:inline capitalize font-medium">{audioMode}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Icon name="volume-x" className="w-4 h-4 opacity-70" />
+                        <span className="text-[11px] hidden sm:inline font-medium">Ambient</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                <button 
+                  onClick={() => setIsReserveOpen(true)}
+                  className="bg-[#2D231C] hover:bg-[#43352A] text-[#F9F6F0] px-4 py-2 rounded-full text-xs font-sans font-medium tracking-wide transition-all shadow-sm active:scale-95 flex items-center gap-1.5"
+                >
+                  <Icon name="calendar" className="w-3.5 h-3.5" />
+                  <span>Reserve Table</span>
+                </button>
+
+                {/* Cart trigger button */}
+                <button 
+                  onClick={() => setIsCartOpen(true)}
+                  className="relative p-2.5 rounded-full bg-[#EFE8DE] hover:bg-[#E7DDCF] border border-[#DFCFC0] text-[#3D3027] transition-colors"
+                  aria-label="View Order Tray"
+                >
+                  <Icon name="shopping-bag" className="w-4 h-4" />
+                  {cartItemCount > 0 && (
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#A85B32] text-white rounded-full text-[10px] font-sans flex items-center justify-center font-bold shadow">
+                      {cartItemCount}
+                    </span>
+                  )}
+                </button>
+              </div>
+            </div>
+          </header>
+
+          {/* Hero Section */}
+          <section className="relative pt-12 pb-20 md:pt-20 md:pb-28 overflow-hidden">
+            <div className="absolute top-1/4 -left-20 w-96 h-96 bg-[#F4EDE2] rounded-full blur-3xl opacity-70 pointer-events-none" />
+            <div className="absolute bottom-10 right-0 w-80 h-80 bg-[#EFE5D6] rounded-full blur-3xl opacity-60 pointer-events-none" />
+
+            <div className="max-w-6xl mx-auto px-6 relative z-10">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div className="lg:col-span-7 space-y-6">
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EFE7DC] border border-[#DFD3C3] text-xs font-sans text-[#705642]">
+                    <Icon name="sparkles" className="w-3.5 h-3.5 text-[#B66E43]" />
+                    <span className="tracking-wide">Autumn Single Origin Micro-Batch Roast Just Arrived</span>
+                  </div>
+
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif text-[#292019] leading-[1.12] font-normal">
+                    Slow mornings, <br />
+                    <span className="italic font-light text-[#885B3A]">sunlit ceramics,</span> <br />
+                    & quiet poured coffee.
+                  </h1>
+
+                  <p className="text-[#655345] font-sans text-base sm:text-lg max-w-xl leading-relaxed font-light">
+                    An artisan roastery and slow bakery celebrating hand-pulled espresso, cardamom-laced brioche, and unhurried conversation inside our botanic sunlit atrium.
+                  </p>
+
+                  <div className="flex flex-wrap items-center gap-4 pt-2">
+                    <a 
+                      href="#menu"
+                      className="bg-[#30241C] text-[#FAF6F0] px-7 py-3.5 rounded-full font-sans text-sm tracking-wide hover:bg-[#48372C] transition-all shadow-md hover:shadow-lg inline-flex items-center gap-2 group"
+                    >
+                      <span>Explore Autumn Menu</span>
+                      <Icon name="arrow-right" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </a>
+
+                    <button 
+                      onClick={() => setIsReserveOpen(true)}
+                      className="border border-[#BFB09F] hover:border-[#8E6D52] hover:bg-[#F3EFE9] text-[#47372B] px-6 py-3.5 rounded-full font-sans text-sm tracking-wide transition-all"
+                    >
+                      Book Afternoon Table
+                    </button>
+                  </div>
+
+                  <div className="pt-4 flex items-center gap-6 text-xs font-sans text-[#756455] border-t border-[#EDE4D8]">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#5E8359] animate-pulse" />
+                      <span>Roastery Open Today: <strong>7:30 AM – 7:00 PM</strong></span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Icon name="map-pin" className="w-3.5 h-3.5 text-[#A56844]" />
+                      <span>242 Hawthorne Terrace, Courtyard Nook</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Hero Visual */}
+                <div className="lg:col-span-5 relative flex justify-center">
+                  <div className="relative w-full max-w-md">
+                    <div className="bg-[#FFFFFF] p-4 pb-8 rounded-2xl shadow-xl border border-[#EDE4D7] transform -rotate-1 hover:rotate-0 transition-transform duration-500">
+                      <div className="aspect-[4/5] rounded-xl overflow-hidden relative">
+                        <img 
+                          src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=900&q=80" 
+                          alt="Warm Cafe Corner" 
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                        <div className="absolute bottom-3 left-4 text-white font-sans text-xs flex items-center gap-1.5">
+                          <Icon name="compass" className="w-3.5 h-3.5 text-[#E7C19D]" />
+                          <span>Natural light conservatory</span>
+                        </div>
+                      </div>
+                      <div className="mt-4 px-2 flex justify-between items-center">
+                        <div>
+                          <p className="font-serif italic text-lg text-[#2E241E]">Table No. 4</p>
+                          <p className="text-[11px] font-sans text-[#8C7A6D] uppercase tracking-wider">Acoustic morning light</p>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-xs font-sans bg-[#F4EFE6] px-2.5 py-1 rounded-full text-[#6E533F] border border-[#E2D5C4]">
+                            Single Origin
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="absolute -bottom-6 -left-6 bg-[#FAF6F0]/95 backdrop-blur-md p-4 rounded-xl shadow-lg border border-[#E0D3C3] max-w-[210px] hidden sm:block">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Icon name="star" className="w-4 h-4 fill-[#C88A4A] text-[#C88A4A]" />
+                        <span className="text-xs font-sans font-semibold text-[#3A2E24]">94/100 Cupping</span>
+                      </div>
+                      <p className="text-[11px] font-sans text-[#715E50] leading-snug">
+                        Bourbon & Geisha varieties roasted weekly in small 5kg cast iron drums.
+                      </p>
+                    </div>
+
+                    <div className="absolute -top-4 -right-4 bg-[#2F241C] text-[#F3EDE3] p-3 rounded-2xl shadow-xl flex items-center gap-3 border border-[#48382C]">
+                      <div className="w-8 h-8 rounded-full bg-[#463529] flex items-center justify-center">
+                        <Icon name="music" className="w-4 h-4 text-[#E2A669]" />
+                      </div>
+                      <div className="text-left pr-2">
+                        <p className="text-[10px] uppercase tracking-wider font-sans text-[#AD9C8E]">Atrium Atmosphere</p>
+                        <p className="text-xs font-serif italic text-[#FDFBF7]">Mellow Acoustic Rain</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* Audio Bar */}
+          <section className="border-y border-[#E9DECFA] bg-[#F4EDE2]/50 py-5">
+            <div className="max-w-6xl mx-auto px-6 flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-sans uppercase tracking-[0.2em] text-[#7A6453] font-medium flex items-center gap-1.5">
+                  <Icon name="sparkles" className="w-3.5 h-3.5 text-[#A56844]" />
+                  Ambient Listening Room:
+                </span>
+                <span className="text-xs font-sans text-[#59473A] hidden sm:inline">
+                  Built with in-browser Web Audio synthesis for serene workspace focus.
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => toggleAudio('lofi')}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-sans flex items-center gap-2 border transition-all ${
+                    isPlayingAudio && audioMode === 'lofi'
+                      ? 'bg-[#3A2B21] text-[#FAF5EC] border-[#3A2B21] shadow-sm'
+                      : 'bg-[#FFFDF9] text-[#55453A] border-[#D9CABB] hover:bg-[#F2ECE3]'
+                  }`}
+                >
+                  <Icon name="music" className="w-3 h-3" />
+                  <span>Warm Rhodes Chimes</span>
+                </button>
+
+                <button
+                  onClick={() => toggleAudio('rain')}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-sans flex items-center gap-2 border transition-all ${
+                    isPlayingAudio && audioMode === 'rain'
+                      ? 'bg-[#3A2B21] text-[#FAF5EC] border-[#3A2B21] shadow-sm'
+                      : 'bg-[#FFFDF9] text-[#55453A] border-[#D9CABB] hover:bg-[#F2ECE3]'
+                  }`}
+                >
+                  <span>🌧️ Courtyard Rain</span>
+                </button>
+
+                {isPlayingAudio && (
+                  <button
+                    onClick={stopAudio}
+                    className="p-1.5 rounded-full hover:bg-[#E5D7C7] text-[#695444] transition-colors"
+                    title="Mute audio"
+                  >
+                    <Icon name="volume-x" className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            </div>
+          </section>
+
+          {/* Menu Catalog */}
+          <section id="menu" className="py-24 max-w-6xl mx-auto px-6">
+            <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
+              <p className="text-xs font-sans uppercase tracking-[0.25em] text-[#936647] font-medium">Curated Provisions</p>
+              <h2 className="text-3xl md:text-5xl font-serif text-[#292019] font-normal">Our Artisanal Offerings</h2>
+              <p className="text-[#6C5B4E] font-sans text-sm md:text-base leading-relaxed font-light">
+                Every cup is dialed each morning to optimal extraction. Pastries are freshly pulled from the hearth oven by 6:45 AM.
+              </p>
+
+              {/* Category Filter Pills */}
+              <div className="flex flex-wrap justify-center gap-2 pt-6">
+                {[
+                  { key: 'all', label: 'All Provisions' },
+                  { key: 'coffee', label: 'Espresso & Pour Overs' },
+                  { key: 'tea', label: 'Ceremonial Teas & Matcha' },
+                  { key: 'bakery', label: 'Slow Bakery' },
+                  { key: 'brunch', label: 'Brunch Plates' }
+                ].map((cat) => (
+                  <button
+                    key={cat.key}
+                    onClick={() => setSelectedCategory(cat.key)}
+                    className={`px-4 py-2 rounded-full text-xs font-sans tracking-wide transition-all ${
+                      selectedCategory === cat.key
+                        ? 'bg-[#2F231B] text-[#FAF6F0] shadow-sm'
+                        : 'bg-[#F2EDE4] text-[#635143] hover:bg-[#E7DED2] border border-[#E3D7C9]'
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Menu Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredItems.map((item) => {
+                const isFav = favorites.includes(item.id);
+                return (
+                  <div 
+                    key={item.id}
+                    onClick={() => setActiveModalItem(item)}
+                    className="group cursor-pointer bg-[#FFFDFB] rounded-2xl overflow-hidden border border-[#ECE2D5] hover:border-[#D0BDA9] transition-all hover:shadow-lg flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="relative aspect-[16/10] overflow-hidden bg-[#EFEAE2]">
+                        <img 
+                          src={item.image} 
+                          alt={item.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                        />
+                        <div className="absolute top-3 left-3 bg-[#2E231C]/80 backdrop-blur-md text-[#F5EDE3] text-[11px] font-sans px-2.5 py-1 rounded-full">
+                          {item.tag}
+                        </div>
+
+                        <button 
+                          onClick={(e) => toggleFavorite(item.id, e)}
+                          className="absolute top-3 right-3 p-2 rounded-full bg-white/80 backdrop-blur-md hover:bg-white text-[#705542] hover:text-[#9B4D2B] transition-colors shadow-sm"
+                          aria-label="Save to favorites"
+                        >
+                          <Icon name="heart" className={`w-3.5 h-3.5 ${isFav ? 'fill-[#A85B32] text-[#A85B32]' : ''}`} />
+                        </button>
+                      </div>
+
+                      <div className="p-6">
+                        <div className="flex justify-between items-start gap-2 mb-2">
+                          <h3 className="font-serif text-xl text-[#292019] group-hover:text-[#844E29] transition-colors leading-snug">
+                            {item.name}
+                          </h3>
+                          <span className="font-sans font-medium text-base text-[#473426] whitespace-nowrap">
+                            ${item.price.toFixed(2)}
+                          </span>
+                        </div>
+
+                        <p className="text-xs font-sans text-[#6B5A4D] line-clamp-2 leading-relaxed mb-4 font-light">
+                          {item.description}
+                        </p>
+
+                        <div className="flex flex-wrap gap-1.5 mb-4">
+                          {item.notes.map((note, idx) => (
+                            <span key={idx} className="text-[10px] font-sans bg-[#F7F2EA] text-[#695444] px-2 py-0.5 rounded-md border border-[#E9DFCFA]">
+                              {note}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="px-6 pb-6 pt-0 flex items-center justify-between border-t border-[#F5EFE6] mt-auto">
+                      <span className="text-[11px] font-sans text-[#8C7A6D] flex items-center gap-1">
+                        <Icon name="clock" className="w-3 h-3 text-[#A86F4B]" />
+                        {item.prepTime}
+                      </span>
+
+                      <button
+                        onClick={(e) => addToCart(item, e)}
+                        className="bg-[#EFE8DE] hover:bg-[#34271F] hover:text-[#FDFBF7] text-[#473629] text-xs font-sans px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 active:scale-95 border border-[#DECFC1]"
+                      >
+                        <Icon name="plus" className="w-3.5 h-3.5" />
+                        <span>Add to Order</span>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* Philosophy Section */}
+          <section id="philosophy" className="py-20 bg-[#F4EDE2]/70 border-y border-[#E9DFCFA]">
+            <div className="max-w-6xl mx-auto px-6">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div className="lg:col-span-5 space-y-6">
+                  <span className="text-xs font-sans uppercase tracking-[0.25em] text-[#936647] font-medium">The Craft Behind L’Aura</span>
+                  <h2 className="text-3xl md:text-4xl font-serif text-[#292019] leading-snug">
+                    We believe coffee should feel like reading the final chapter of a favorite book.
+                  </h2>
+                  <p className="text-[#655346] font-sans text-sm md:text-base leading-relaxed font-light">
+                    Our roastery was founded on the idea that the sensory rituals of a morning coffee should be peaceful, thoughtful, and unhurried. We roast in modest 5-kilo batches to honor the nuances coaxed from high-altitude shade-grown harvests.
+                  </p>
+
+                  <div className="pt-2 flex items-center gap-4">
+                    <div className="border-l-2 border-[#A85B32] pl-4">
+                      <p className="italic font-serif text-[#3A2B20] text-sm">
+                        "Coffee is not merely fuel for speed; it is an invitation to inhabit the current minute."
+                      </p>
+                      <p className="text-[11px] font-sans text-[#836D5B] mt-1 uppercase tracking-wider">
+                        — Henriette & Clara, Head Roasters
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {PHILOSOPHY_PILLARS.map((pillar, idx) => (
+                    <div key={idx} className="bg-[#FFFDFB] p-6 rounded-2xl border border-[#E9E0D4] shadow-sm flex flex-col justify-between">
+                      <div>
+                        <span className="text-2xl font-serif text-[#B87A53] font-light mb-2 block">
+                          0{idx + 1}
+                        </span>
+                        <h3 className="font-serif text-lg text-[#2A2018] mb-2">{pillar.title}</h3>
+                        <p className="text-xs font-sans text-[#6B5A4D] leading-relaxed font-light">
+                          {pillar.desc}
+                        </p>
+                      </div>
+                      <div className="pt-4 mt-4 border-t border-[#F2ECE3]">
+                        <Icon name="feather" className="w-4 h-4 text-[#A76943]" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Atmosphere & Gallery Section */}
+          <section id="atmosphere" className="py-24 max-w-6xl mx-auto px-6">
+            <div className="text-center max-w-xl mx-auto mb-16 space-y-2">
+              <p className="text-xs font-sans uppercase tracking-[0.25em] text-[#936647] font-medium">Moments Captured</p>
+              <h2 className="text-3xl md:text-4xl font-serif text-[#292019]">Sunlight, Shelves & Steam</h2>
+              <p className="text-xs font-sans text-[#6F5E51]">
+                Polaroids pinned around our espresso bar from mornings past.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+              {GALLERY_MOMENTS.map((photo) => (
+                <div 
+                  key={photo.id}
+                  className={`bg-[#FFFFFF] p-3 pb-6 rounded-xl shadow-md border border-[#EBE1D3] transition-all hover:scale-105 hover:z-20 hover:shadow-xl ${photo.rotation}`}
+                >
+                  <div className="aspect-square rounded-lg overflow-hidden mb-3 bg-[#EAE2D5]">
+                    <img 
+                      src={photo.image} 
+                      alt={photo.title} 
+                      className="w-full h-full object-cover hover:contrast-105 transition-all"
+                    />
+                  </div>
+                  <div className="px-1 space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-sans uppercase tracking-widest text-[#9C6D4C] bg-[#F8F3EA] px-2 py-0.5 rounded">
+                        {photo.tag}
+                      </span>
+                    </div>
+                    <h4 className="font-serif text-sm text-[#2C231B] font-medium pt-1">{photo.title}</h4>
+                    <p className="text-[11px] font-sans text-[#786658] font-light leading-snug">{photo.caption}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="bg-[#30241C] text-[#F9F5EE] rounded-3xl p-8 md:p-12 relative overflow-hidden shadow-xl">
+              <div className="absolute -top-10 -right-10 w-64 h-64 bg-[#4A392D] rounded-full blur-2xl opacity-40 pointer-events-none" />
+
+              <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+                <div className="space-y-2 border-b md:border-b-0 md:border-r border-[#4A3B31] pb-6 md:pb-0 md:pr-6">
+                  <div className="flex justify-center md:justify-start gap-1 text-[#D79A58] mb-2">
+                    {[...Array(5)].map((_, i) => <Icon key={i} name="star" className="w-3.5 h-3.5 fill-current" />)}
+                  </div>
+                  <p className="text-sm font-serif italic text-[#F1E8DC]">
+                    "The Smoked Vanilla Cortado with their hearth hazelnut croissant is my Saturday morning sanctuary."
+                  </p>
+                  <p className="text-xs font-sans text-[#A49282] uppercase tracking-wider">— Elena R., Local Illustrator</p>
+                </div>
+
+                <div className="space-y-2 border-b md:border-b-0 md:border-r border-[#4A3B31] pb-6 md:pb-0 md:pr-6">
+                  <div className="flex justify-center md:justify-start gap-1 text-[#D79A58] mb-2">
+                    {[...Array(5)].map((_, i) => <Icon key={i} name="star" className="w-3.5 h-3.5 fill-current" />)}
+                  </div>
+                  <p className="text-sm font-serif italic text-[#F1E8DC]">
+                    "A rare cafe that actually treats ambient acoustics and seating textures with the same reverence as their Geisha brews."
+                  </p>
+                  <p className="text-xs font-sans text-[#A49282] uppercase tracking-wider">— Julien M., Architect</p>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex justify-center md:justify-start gap-1 text-[#D79A58] mb-2">
+                    {[...Array(5)].map((_, i) => <Icon key={i} name="star" className="w-3.5 h-3.5 fill-current" />)}
+                  </div>
+                  <p className="text-sm font-serif italic text-[#F1E8DC]">
+                    "Natural daylight, the smell of freshly roasted cardamom espresso, and total tranquility for writing."
+                  </p>
+                  <p className="text-xs font-sans text-[#A49282] uppercase tracking-wider">— Sarah T., Author</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Location & Roaster Schedule */}
+          <section id="visit" className="py-20 bg-[#F4EDE2]/50 border-t border-[#E8DECFA]">
+            <div className="max-w-6xl mx-auto px-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6">
+                  <span className="text-xs font-sans uppercase tracking-[0.25em] text-[#936647] font-medium">Find Us</span>
+                  <h2 className="text-3xl md:text-4xl font-serif text-[#292019]">Join Us for a Poured Cup</h2>
+                  <p className="text-[#655346] font-sans text-sm md:text-base leading-relaxed font-light">
+                    Nestled inside the brick courtyard behind the Old Botanical Conservatory. Bicycle racks and shaded reading benches available under the wisteria trellis.
+                  </p>
+
+                  <div className="space-y-4 pt-2 font-sans text-sm">
+                    <div className="flex items-start gap-3">
+                      <Icon name="map-pin" className="w-5 h-5 text-[#A85B32] shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-[#2E231C]">242 Hawthorne Terrace (Courtyard Nook)</p>
+                        <p className="text-xs text-[#7B6A5C]">West District, Old Conservatory Arcade</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <Icon name="clock" className="w-5 h-5 text-[#A85B32] shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-[#2E231C]">Monday – Friday: 7:00 AM – 6:30 PM</p>
+                        <p className="text-xs text-[#7B6A5C]">Saturday – Sunday: 8:00 AM – 7:00 PM</p>
+                        <p className="text-[11px] text-[#A85B32] mt-0.5">Bakery warms fresh at 7:00 AM & 12:30 PM</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <Icon name="mail" className="w-5 h-5 text-[#A85B32] shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-[#2E231C]">bonjour@lauracafe.com</p>
+                        <p className="text-xs text-[#7B6A5C]">For private roastery tastings and book club events</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-4">
+                    <button
+                      onClick={() => setIsReserveOpen(true)}
+                      className="bg-[#2D231C] text-[#FAF6F0] px-6 py-3 rounded-full text-xs font-sans tracking-wide hover:bg-[#45362B] transition-all shadow"
+                    >
+                      Reserve A Corner Nook
+                    </button>
+                  </div>
+                </div>
+
+                <div className="bg-[#FFFDFB] p-8 rounded-3xl border border-[#EDE2D4] shadow-md space-y-6">
+                  <div className="flex items-center justify-between border-b border-[#F2ECE3] pb-4">
+                    <div>
+                      <h4 className="font-serif text-lg text-[#2D231C]">Daily Roastery Schedule</h4>
+                      <p className="text-xs font-sans text-[#8C7A6D]">Dialing in flavors every morning</p>
+                    </div>
+                    <span className="w-3 h-3 rounded-full bg-[#52824D] animate-ping" />
+                  </div>
+
+                  <div className="space-y-3 font-sans text-xs">
+                    <div className="flex justify-between p-3 rounded-xl bg-[#FAF6F0] border border-[#EFE7DC]">
+                      <div>
+                        <p className="font-semibold text-[#3E3025]">Morning Cupping & Dial-in</p>
+                        <p className="text-[#7F6E60]">Espresso extraction calibration</p>
+                      </div>
+                      <span className="font-mono text-[#8E5E3D]">7:00 AM</span>
+                    </div>
+
+                    <div className="flex justify-between p-3 rounded-xl bg-[#FAF6F0] border border-[#EFE7DC]">
+                      <div>
+                        <p className="font-semibold text-[#3E3025]">Slow Hearth Sourdough Pull</p>
+                        <p className="text-[#7F6E60]">Warm croissants and brioches</p>
+                      </div>
+                      <span className="font-mono text-[#8E5E3D]">7:30 AM</span>
+                    </div>
+
+                    <div className="flex justify-between p-3 rounded-xl bg-[#FAF6F0] border border-[#EFE7DC]">
+                      <div>
+                        <p className="font-semibold text-[#3E3025]">Micro-Batch Drum Roasting</p>
+                        <p className="text-[#7F6E60]">Open viewing at roaster bar</p>
+                      </div>
+                      <span className="font-mono text-[#8E5E3D]">2:00 PM</span>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-[#F6F0E6] text-[#695646] text-xs font-sans flex items-center gap-3">
+                    <Icon name="bookmark" className="w-4 h-4 text-[#A85B32] shrink-0" />
+                    <span>Borrow a paperback from our community bookshelves; return whenever finished.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Footer */}
+          <footer className="bg-[#241C16] text-[#EDE4DA] pt-16 pb-12 font-sans border-t border-[#382B22]">
+            <div className="max-w-6xl mx-auto px-6">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-[#3D2F24]">
+                <div className="md:col-span-4 space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[#3B2D23] flex items-center justify-center text-[#E3B07D]">
+                      <Icon name="coffee" className="w-4 h-4" />
+                    </div>
+                    <span className="text-xl font-serif text-[#FAF6F0]">L’Aura Café</span>
+                  </div>
+                  <p className="text-xs text-[#A8988A] leading-relaxed font-light">
+                    An ode to slow living, ethical bean sourcing, and morning warmth. Handcrafted daily in our courtyard roastery.
+                  </p>
+                  <div className="flex items-center gap-3 text-[#B8A696] pt-1">
+                    <a href="#instagram" className="p-2 rounded-full bg-[#352920] hover:text-white transition-colors" title="Instagram">
+                      <Icon name="instagram" className="w-4 h-4" />
+                    </a>
+                    <a href="#mail" className="p-2 rounded-full bg-[#352920] hover:text-white transition-colors" title="Contact Us">
+                      <Icon name="mail" className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+
+                <div className="md:col-span-2 space-y-3">
+                  <p className="text-xs uppercase tracking-widest text-[#D3A06E] font-medium">Explore</p>
+                  <ul className="text-xs space-y-2 text-[#A8988A]">
+                    <li><a href="#menu" className="hover:text-white transition-colors">Menu Catalog</a></li>
+                    <li><a href="#philosophy" className="hover:text-white transition-colors">Bean Origins</a></li>
+                    <li><a href="#atmosphere" className="hover:text-white transition-colors">The Courtyard</a></li>
+                    <li><button onClick={() => setIsReserveOpen(true)} className="hover:text-white transition-colors">Reservations</button></li>
+                  </ul>
+                </div>
+
+                <div className="md:col-span-2 space-y-3">
+                  <p className="text-xs uppercase tracking-widest text-[#D3A06E] font-medium">Roastery</p>
+                  <ul className="text-xs space-y-2 text-[#A8988A]">
+                    <li>Direct Trade Partners</li>
+                    <li>Cold Drip Towers</li>
+                    <li>Ceramics & Mugs</li>
+                    <li>Barista Masterclasses</li>
+                  </ul>
+                </div>
+
+                <div className="md:col-span-4 space-y-3">
+                  <p className="text-xs uppercase tracking-widest text-[#D3A06E] font-medium">Sunday Morning Postcards</p>
+                  <p className="text-xs text-[#A8988A] leading-relaxed">
+                    Receive our monthly coffee bean cupping notes, seasonal bakery releases, and quiet playlist curations.
+                  </p>
+                  <form 
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      showToast('💌 Subscribed to Sunday Morning Postcards');
+                      e.target.reset();
+                    }}
+                    className="flex items-center gap-2 pt-1"
+                  >
+                    <input 
+                      type="email" 
+                      required 
+                      placeholder="your.email@quietmorning.com" 
+                      className="bg-[#352920] border border-[#4E3D30] rounded-full px-4 py-2 text-xs text-white placeholder-[#7C6C5E] focus:outline-none focus:border-[#C48958] flex-1" 
+                    />
+                    <button 
+                      type="submit" 
+                      className="bg-[#D3A06E] hover:bg-[#E3AF7D] text-[#241C16] px-4 py-2 rounded-full text-xs font-medium tracking-wide transition-colors"
+                    >
+                      Join
+                    </button>
+                  </form>
+                </div>
+              </div>
+
+              <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#7C6E61]">
+                <p>© {new Date().getFullYear()} L’Aura Café & Roastery. Crafted with warmth & serenity.</p>
+                <p className="mt-2 sm:mt-0 font-serif italic">Pour slowly. Breathe deeply.</p>
+              </div>
+            </div>
+          </footer>
+
+          {/* Item Details Modal */}
+          {activeModalItem && (
+            <div className="fixed inset-0 z-50 bg-[#1F1712]/60 backdrop-blur-sm flex items-center justify-center p-4">
+              <div 
+                className="bg-[#FFFDFB] rounded-3xl max-w-lg w-full overflow-hidden border border-[#E7DCCE] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button 
+                  onClick={() => setActiveModalItem(null)}
+                  className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors"
+                >
+                  <Icon name="x" className="w-4 h-4" />
+                </button>
+
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <img 
+                    src={activeModalItem.image} 
+                    alt={activeModalItem.name} 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute bottom-3 left-4 bg-[#2D221A]/85 backdrop-blur-md text-[#FAF6F0] text-xs font-sans px-3 py-1 rounded-full">
+                    {activeModalItem.tag}
+                  </div>
+                </div>
+
+                <div className="p-6 md:p-8 space-y-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-serif text-2xl text-[#2B2119]">{activeModalItem.name}</h3>
+                      <span className="text-xs font-sans text-[#916B4E] uppercase tracking-wider">
+                        {activeModalItem.prepTime}
+                      </span>
+                    </div>
+                    <span className="text-xl font-sans font-medium text-[#38281C]">
+                      ${activeModalItem.price.toFixed(2)}
+                    </span>
+                  </div>
+
+                  <p className="text-xs md:text-sm font-sans text-[#6B5A4D] leading-relaxed font-light">
+                    {activeModalItem.description}
+                  </p>
+
+                  <div>
+                    <p className="text-[11px] font-sans uppercase tracking-widest text-[#856C5B] font-semibold mb-2">
+                      Flavor Profile & Scent Notes:
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {activeModalItem.notes.map((note, i) => (
+                        <span key={i} className="text-xs font-sans bg-[#F5EFE5] text-[#554233] px-3 py-1 rounded-full border border-[#E5DACB]">
+                          {note}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-[#F2ECE3] flex items-center gap-2">
+                    <span className="text-[11px] font-sans text-[#7D6B5C]">Details:</span>
+                    {activeModalItem.dietary.map((d, i) => (
+                      <span key={i} className="text-[11px] font-sans text-[#52774C] bg-[#EDF4EB] px-2 py-0.5 rounded font-medium">
+                        {d}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="pt-4 flex gap-3">
+                    <button
+                      onClick={() => {
+                        addToCart(activeModalItem);
+                        setActiveModalItem(null);
+                      }}
+                      className="flex-1 bg-[#2F231B] hover:bg-[#433427] text-[#FAF6F0] py-3 rounded-full font-sans text-xs font-medium tracking-wide transition-all shadow flex items-center justify-center gap-2"
+                    >
+                      <Icon name="shopping-bag" className="w-4 h-4" />
+                      <span>Add to Order Tray (${activeModalItem.price.toFixed(2)})</span>
+                    </button>
+
+                    <button
+                      onClick={() => toggleFavorite(activeModalItem.id)}
+                      className={`p-3 rounded-full border transition-all ${
+                        favorites.includes(activeModalItem.id)
+                          ? 'border-[#C26B39] text-[#C26B39] bg-[#FDF5F0]'
+                          : 'border-[#DFCFC0] text-[#695444] hover:bg-[#F7F2EA]'
+                      }`}
+                      aria-label="Wishlist"
+                    >
+                      <Icon name="heart" className={`w-4 h-4 ${favorites.includes(activeModalItem.id) ? 'fill-current text-[#C26B39]' : ''}`} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Reservation Modal */}
+          {isReserveOpen && (
+            <div className="fixed inset-0 z-50 bg-[#1B140F]/65 backdrop-blur-sm flex items-center justify-center p-4">
+              <div 
+                className="bg-[#FFFDFB] rounded-3xl max-w-lg w-full p-6 md:p-8 border border-[#EADBCC] shadow-2xl relative animate-in fade-in zoom-in-95 duration-200"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button 
+                  onClick={() => setIsReserveOpen(false)}
+                  className="absolute top-5 right-5 p-2 rounded-full hover:bg-[#F2ECE3] text-[#6C594A] transition-colors"
+                >
+                  <Icon name="x" className="w-4 h-4" />
+                </button>
+
+                {reservationSuccess ? (
+                  <div className="py-12 text-center space-y-4">
+                    <div className="w-14 h-14 bg-[#EEF5EC] text-[#4F7C49] rounded-full flex items-center justify-center mx-auto shadow-inner">
+                      <Icon name="check" className="w-7 h-7 stroke-[2.5]" />
+                    </div>
+                    <h3 className="font-serif text-2xl text-[#2B2119]">Your Table Awaits</h3>
+                    <p className="text-xs md:text-sm font-sans text-[#6B5A4D] max-w-xs mx-auto">
+                      A corner table in the {reserveForm.tableType} has been reserved for {reserveForm.name}. A confirmation email was dispatched.
+                    </p>
+                    <div className="pt-2 text-[11px] font-sans text-[#8C7A6D]">
+                      We keep reserved tables held for 15 minutes past scheduled time.
+                    </div>
+                  </div>
+                ) : (
+                  <form onSubmit={handleReserveSubmit} className="space-y-4 font-sans">
+                    <div className="space-y-1">
+                      <span className="text-[10px] uppercase tracking-widest text-[#9A6A47] font-semibold">Table Hospitality</span>
+                      <h3 className="font-serif text-2xl text-[#2B2119]">Reserve A Quiet Space</h3>
+                      <p className="text-xs text-[#715E50] font-light">
+                        Select your preferred setting for morning espresso flights or afternoon work.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                      <div>
+                        <label className="text-[11px] font-medium text-[#5E4E41] block mb-1">Your Name</label>
+                        <input 
+                          type="text"
+                          required
+                          placeholder="Genevieve Marchand"
+                          value={reserveForm.name}
+                          onChange={(e) => setReserveForm({...reserveForm, name: e.target.value})}
+                          className="w-full bg-[#FAF7F2] border border-[#DDD0C0] rounded-xl px-3 py-2 text-xs text-[#2F231A] focus:outline-none focus:border-[#A85B32]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[11px] font-medium text-[#5E4E41] block mb-1">Email Address</label>
+                        <input 
+                          type="email"
+                          required
+                          placeholder="genevieve@atelier.com"
+                          value={reserveForm.email}
+                          onChange={(e) => setReserveForm({...reserveForm, email: e.target.value})}
+                          className="w-full bg-[#FAF7F2] border border-[#DDD0C0] rounded-xl px-3 py-2 text-xs text-[#2F231A] focus:outline-none focus:border-[#A85B32]"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div>
+                        <label className="text-[11px] font-medium text-[#5E4E41] block mb-1">Date</label>
+                        <input 
+                          type="date"
+                          value={reserveForm.date}
+                          onChange={(e) => setReserveForm({...reserveForm, date: e.target.value})}
+                          className="w-full bg-[#FAF7F2] border border-[#DDD0C0] rounded-xl px-3 py-2 text-xs text-[#2F231A] focus:outline-none focus:border-[#A85B32]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[11px] font-medium text-[#5E4E41] block mb-1">Time Slot</label>
+                        <select
+                          value={reserveForm.time}
+                          onChange={(e) => setReserveForm({...reserveForm, time: e.target.value})}
+                          className="w-full bg-[#FAF7F2] border border-[#DDD0C0] rounded-xl px-3 py-2 text-xs text-[#2F231A] focus:outline-none focus:border-[#A85B32]"
+                        >
+                          <option>8:30 AM (Morning Sun)</option>
+                          <option>10:30 AM (Warm Pastry Rush)</option>
+                          <option>1:00 PM (Quiet Lunch)</option>
+                          <option>3:30 PM (Acoustic Afternoon)</option>
+                          <option>5:00 PM (Golden Hour)</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="text-[11px] font-medium text-[#5E4E41] block mb-1">Party</label>
+                        <select
+                          value={reserveForm.guests}
+                          onChange={(e) => setReserveForm({...reserveForm, guests: e.target.value})}
+                          className="w-full bg-[#FAF7F2] border border-[#DDD0C0] rounded-xl px-3 py-2 text-xs text-[#2F231A] focus:outline-none focus:border-[#A85B32]"
+                        >
+                          <option>1 Guest (Solo Reading)</option>
+                          <option>2 Guests</option>
+                          <option>3-4 Guests</option>
+                          <option>5+ Guests (Garden Bench)</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-[11px] font-medium text-[#5E4E41] block mb-1">Seating Atmosphere</label>
+                      <select
+                        value={reserveForm.tableType}
+                        onChange={(e) => setReserveForm({...reserveForm, tableType: e.target.value})}
+                        className="w-full bg-[#FAF7F2] border border-[#DDD0C0] rounded-xl px-3 py-2 text-xs text-[#2F231A] focus:outline-none focus:border-[#A85B32]"
+                      >
+                        <option>Window Nook with Natural Light</option>
+                        <option>Botanical Garden Trellis (Outdoor)</option>
+                        <option>Bookshelf Library Table</option>
+                        <option>Barista Slow-Drip Counter</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="text-[11px] font-medium text-[#5E4E41] block mb-1">Special Whispers / Dietary Notes (Optional)</label>
+                      <textarea 
+                        rows={2}
+                        placeholder="e.g. Celebrating a quiet anniversary; gluten sensitive..."
+                        value={reserveForm.note}
+                        onChange={(e) => setReserveForm({...reserveForm, note: e.target.value})}
+                        className="w-full bg-[#FAF7F2] border border-[#DDD0C0] rounded-xl px-3 py-2 text-xs text-[#2F231A] focus:outline-none focus:border-[#A85B32]"
+                      />
+                    </div>
+
+                    <div className="pt-2">
+                      <button
+                        type="submit"
+                        className="w-full bg-[#2F231A] hover:bg-[#433326] text-[#FAF6F0] py-3 rounded-full text-xs font-medium tracking-wide transition-all shadow"
+                      >
+                        Confirm Table Reservation
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Cart Drawer */}
+          {isCartOpen && (
+            <div className="fixed inset-0 z-50 bg-[#1D1611]/60 backdrop-blur-sm flex justify-end">
+              <div 
+                className="bg-[#FFFDFB] w-full max-w-md h-full shadow-2xl border-l border-[#E6DBD0] flex flex-col justify-between animate-in slide-in-from-right duration-300"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="p-6 border-b border-[#F0E7DB] flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Icon name="shopping-bag" className="w-5 h-5 text-[#A56844]" />
+                    <h3 className="font-serif text-xl text-[#2B211A]">Your Curated Tray</h3>
+                  </div>
+                  <button 
+                    onClick={() => setIsCartOpen(false)}
+                    className="p-1.5 rounded-full hover:bg-[#F4EDE2] text-[#695444] transition-colors"
+                  >
+                    <Icon name="x" className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="p-6 flex-1 overflow-y-auto space-y-4">
+                  {cart.length === 0 ? (
+                    <div className="py-20 text-center space-y-3 font-sans">
+                      <div className="w-12 h-12 rounded-full bg-[#F4EFE6] text-[#8E7969] flex items-center justify-center mx-auto">
+                        <Icon name="coffee" className="w-5 h-5" />
+                      </div>
+                      <p className="font-serif text-lg text-[#32271F]">Your tray is waiting</p>
+                      <p className="text-xs text-[#7B6A5C] max-w-xs mx-auto">
+                        Add a single-origin pour-over or a freshly warm hearth croissant to begin.
+                      </p>
+                      <button
+                        onClick={() => setIsCartOpen(false)}
+                        className="mt-2 text-xs font-medium text-[#A85B32] hover:underline"
+                      >
+                        Return to menu catalog
+                      </button>
+                    </div>
+                  ) : (
+                    cart.map(item => (
+                      <div 
+                        key={item.id}
+                        className="p-3 bg-[#FAF7F2] rounded-2xl border border-[#EDE2D5] flex items-center justify-between gap-3 font-sans"
+                      >
+                        <img 
+                          src={item.image} 
+                          alt={item.name} 
+                          className="w-14 h-14 rounded-xl object-cover shrink-0"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-serif text-sm text-[#2C2119] truncate">{item.name}</h4>
+                          <p className="text-xs text-[#806B5B]">${item.price.toFixed(2)} each</p>
+                        </div>
+
+                        <div className="flex items-center gap-2 bg-[#FFFDFB] border border-[#E3D6C8] rounded-full px-2 py-1">
+                          <button 
+                            onClick={() => updateCartQty(item.id, -1)}
+                            className="text-[#6D5A4C] hover:text-black p-0.5"
+                          >
+                            <Icon name="minus" className="w-3 h-3" />
+                          </button>
+                          <span className="text-xs font-semibold w-4 text-center">{item.qty}</span>
+                          <button 
+                            onClick={() => updateCartQty(item.id, 1)}
+                            className="text-[#6D5A4C] hover:text-black p-0.5"
+                          >
+                            <Icon name="plus" className="w-3 h-3" />
+                          </button>
+                        </div>
+
+                        <span className="text-xs font-medium text-[#382B21] whitespace-nowrap">
+                          ${(item.price * item.qty).toFixed(2)}
+                        </span>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                {cart.length > 0 && (
+                  <div className="p-6 border-t border-[#EFE5D9] bg-[#FAF7F2] space-y-4 font-sans">
+                    <div className="space-y-1.5 text-xs text-[#6B5749]">
+                      <div className="flex justify-between">
+                        <span>Subtotal</span>
+                        <span>${cartTotal.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Barista Roastery Tax (5%)</span>
+                        <span>${(cartTotal * 0.05).toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between text-sm font-semibold text-[#292019] pt-2 border-t border-[#E4D7C8]">
+                        <span>Total Order</span>
+                        <span>${(cartTotal * 1.05).toFixed(2)}</span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        showToast('☕ Order placed! Preparing your tray at the bar.');
+                        setCart([]);
+                        setIsCartOpen(false);
+                      }}
+                      className="w-full bg-[#2E221A] hover:bg-[#433428] text-[#F9F5EE] py-3.5 rounded-full text-xs font-medium tracking-wide transition-all shadow flex items-center justify-center gap-2"
+                    >
+                      <Icon name="check" className="w-4 h-4" />
+                      <span>Send Order to Espresso Bar (${(cartTotal * 1.05).toFixed(2)})</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Floating Mobile Cart Bar */}
+          {cartItemCount > 0 && !isCartOpen && (
+            <div className="fixed bottom-6 right-6 z-30">
+              <button
+                onClick={() => setIsCartOpen(true)}
+                className="bg-[#2B2018] text-[#FBF7F1] pl-4 pr-5 py-3 rounded-full shadow-2xl border border-[#48372B] flex items-center gap-3 hover:scale-105 active:scale-95 transition-all"
+              >
+                <div className="relative">
+                  <Icon name="shopping-bag" className="w-4 h-4 text-[#DDB083]" />
+                  <span className="absolute -top-2 -right-2 w-4 h-4 bg-[#B5673E] text-white rounded-full text-[9px] font-sans flex items-center justify-center font-bold">
+                    {cartItemCount}
+                  </span>
+                </div>
+                <div className="text-left font-sans">
+                  <span className="text-xs font-medium block">View Tray</span>
+                </div>
+                <span className="text-xs font-mono text-[#DDB083] font-bold border-l border-[#49382C] pl-2">
+                  ${(cartTotal * 1.05).toFixed(2)}
+                </span>
+              </button>
+            </div>
+          )}
+
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
