@@ -177,49 +177,49 @@
       {
         id: 1,
         title: 'Morning Sunbeams & First Pours',
-        caption: '7:45 AM / The quiet ritual before the world wakes.',
+        caption: 'The quiet ritual before the world wakes.',
         rotation: '-rotate-2',
         image: 'https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=600&q=80',
-        tag: 'Window Bar'
+        tag: 'Espresso Bar'
       },
       {
         id: 2,
-        title: 'The Courtyard Fig Tree',
-        caption: 'Dappled afternoon shade with a book and cold drip.',
+        title: 'Shaded Patio & Greenery',
+        caption: 'Future courtyard concept under natural daylight.',
         rotation: 'rotate-3',
         image: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=600&q=80',
-        tag: 'Courtyard'
+        tag: 'Architecture'
       },
       {
         id: 3,
         title: 'Daily Hearth Loaves',
-        caption: 'Slow fermented for 36 hours. Cracking crust warm to the touch.',
+        caption: 'Slow fermented recipes being perfected.',
         rotation: '-rotate-1',
         image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80',
-        tag: 'Bakery Hearth'
+        tag: 'Bakery Test Kitchen'
       },
       {
         id: 4,
         title: 'Vinyl & Coffee Grounds',
-        caption: 'Lo-fi beats, gentle chatter, and the scent of freshly ground Geisha.',
+        caption: 'Lo-fi beats, gentle chatter, and specialty roasts.',
         rotation: 'rotate-2',
         image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80',
-        tag: 'Living Lounge'
+        tag: 'Roastery Lab'
       }
     ];
 
     const PHILOSOPHY_PILLARS = [
       {
         title: 'Single-Estate Sourcing',
-        desc: 'We roast microlots from multi-generational family farms with regenerative agroforestry practices in Huila, Yirgacheffe, and Antigua.'
+        desc: 'We curate microlots from multi-generational family farms with ethical practices in high-altitude shade-grown estates.'
       },
       {
         title: 'Slow Fermentation Hearth',
-        desc: 'Our bakery uses local stone-milled ancient grains and wild sourdough starters nurtured across eight continuous years.'
+        desc: 'Our bakery concepts focus on local stone-milled grains and slow sourdough fermentation for nuanced flavor.'
       },
       {
         title: 'The Art of Lingering',
-        desc: 'No rush timers, warm tactile ceramics by local potters, and corner nooks created strictly for quiet thoughts and conversations.'
+        desc: 'Crafting spaces meant for thoughtful thoughts, artisanal coffee ceremonies, and genuine conversation.'
       }
     ];
 
@@ -387,7 +387,7 @@
           }
           return [...prev, { ...item, qty: 1 }];
         });
-        showToast(`Added ${item.name} to order`);
+        showToast(`Added ${item.name} to order preview`);
       };
 
       const updateCartQty = (id, delta) => {
@@ -424,7 +424,7 @@
         setTimeout(() => {
           setReservationSuccess(false);
           setIsReserveOpen(false);
-          showToast(`✨ Table reserved for ${reserveForm.name} on ${reserveForm.date}`);
+          showToast(`✨ Thanks ${reserveForm.name}! Added to our early tasting list.`);
         }, 1800);
       };
 
@@ -458,10 +458,10 @@
 
               {/* Desktop Nav Links */}
               <nav className="hidden md:flex items-center gap-8 text-sm font-sans tracking-wider text-[#5A4B40]">
-                <a href="#menu" className="hover:text-[#9B5C35] transition-colors">Menu</a>
+                <a href="#menu" className="hover:text-[#9B5C35] transition-colors">Menu Concepts</a>
                 <a href="#philosophy" className="hover:text-[#9B5C35] transition-colors">Philosophy</a>
                 <a href="#atmosphere" className="hover:text-[#9B5C35] transition-colors">Atmosphere</a>
-                <a href="#visit" className="hover:text-[#9B5C35] transition-colors">Hours & Location</a>
+                <a href="#visit" className="hover:text-[#9B5C35] transition-colors">Hours & Contact</a>
               </nav>
 
               {/* Action Hub */}
@@ -495,7 +495,7 @@
                   className="bg-[#2D231C] hover:bg-[#43352A] text-[#F9F6F0] px-4 py-2 rounded-full text-xs font-sans font-medium tracking-wide transition-all shadow-sm active:scale-95 flex items-center gap-1.5"
                 >
                   <Icon name="calendar" className="w-3.5 h-3.5" />
-                  <span>Reserve Table</span>
+                  <span>Early Tasting Access</span>
                 </button>
 
                 {/* Cart trigger button */}
@@ -526,7 +526,7 @@
                 <div className="lg:col-span-7 space-y-6">
                   <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EFE7DC] border border-[#DFD3C3] text-xs font-sans text-[#705642]">
                     <Icon name="sparkles" className="w-3.5 h-3.5 text-[#B66E43]" />
-                    <span className="tracking-wide">Autumn Single Origin Micro-Batch Roast Just Arrived</span>
+                    <span className="tracking-wide">Concept In Development • Online Roastery Preview</span>
                   </div>
 
                   <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif text-[#292019] leading-[1.12] font-normal">
@@ -536,7 +536,7 @@
                   </h1>
 
                   <p className="text-[#655345] font-sans text-base sm:text-lg max-w-xl leading-relaxed font-light">
-                    An artisan roastery and slow bakery celebrating hand-pulled espresso, cardamom-laced brioche, and unhurried conversation inside our botanic sunlit atrium.
+                    An artisan roastery and slow bakery celebrating hand-pulled espresso, cardamom-laced brioche, and unhurried conversation. Currently developing recipes and preparing our future physical home.
                   </p>
 
                   <div className="flex flex-wrap items-center gap-4 pt-2">
@@ -544,7 +544,7 @@
                       href="#menu"
                       className="bg-[#30241C] text-[#FAF6F0] px-7 py-3.5 rounded-full font-sans text-sm tracking-wide hover:bg-[#48372C] transition-all shadow-md hover:shadow-lg inline-flex items-center gap-2 group"
                     >
-                      <span>Explore Autumn Menu</span>
+                      <span>Explore Menu Concepts</span>
                       <Icon name="arrow-right" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </a>
 
@@ -552,18 +552,18 @@
                       onClick={() => setIsReserveOpen(true)}
                       className="border border-[#BFB09F] hover:border-[#8E6D52] hover:bg-[#F3EFE9] text-[#47372B] px-6 py-3.5 rounded-full font-sans text-sm tracking-wide transition-all"
                     >
-                      Book Afternoon Table
+                      Join Tasting Waitlist
                     </button>
                   </div>
 
-                  <div className="pt-4 flex items-center gap-6 text-xs font-sans text-[#756455] border-t border-[#EDE4D8]">
+                  <div className="pt-4 flex flex-wrap items-center gap-6 text-xs font-sans text-[#756455] border-t border-[#EDE4D8]">
                     <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#5E8359] animate-pulse" />
-                      <span>Roastery Open Today: <strong>7:30 AM – 7:00 PM</strong></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#D48955] animate-pulse" />
+                      <span>Online Support & Roasting Hours: <strong>Monday – Sunday: 7:00 AM – 10:00 PM</strong></span>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <Icon name="map-pin" className="w-3.5 h-3.5 text-[#A56844]" />
-                      <span>242 Hawthorne Terrace, Courtyard Nook</span>
+                      <span>Flagship Roastery: <em>Location in Progress</em></span>
                     </div>
                   </div>
                 </div>
@@ -581,13 +581,13 @@
                         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                         <div className="absolute bottom-3 left-4 text-white font-sans text-xs flex items-center gap-1.5">
                           <Icon name="compass" className="w-3.5 h-3.5 text-[#E7C19D]" />
-                          <span>Natural light conservatory</span>
+                          <span>Flagship Interior Concept</span>
                         </div>
                       </div>
                       <div className="mt-4 px-2 flex justify-between items-center">
                         <div>
-                          <p className="font-serif italic text-lg text-[#2E241E]">Table No. 4</p>
-                          <p className="text-[11px] font-sans text-[#8C7A6D] uppercase tracking-wider">Acoustic morning light</p>
+                          <p className="font-serif italic text-lg text-[#2E241E]">Batch 01</p>
+                          <p className="text-[11px] font-sans text-[#8C7A6D] uppercase tracking-wider">Dialed with care</p>
                         </div>
                         <div className="text-right">
                           <span className="text-xs font-sans bg-[#F4EFE6] px-2.5 py-1 rounded-full text-[#6E533F] border border-[#E2D5C4]">
@@ -603,7 +603,7 @@
                         <span className="text-xs font-sans font-semibold text-[#3A2E24]">94/100 Cupping</span>
                       </div>
                       <p className="text-[11px] font-sans text-[#715E50] leading-snug">
-                        Bourbon & Geisha varieties roasted weekly in small 5kg cast iron drums.
+                        Bourbon & Geisha varieties curated in micro-batches.
                       </p>
                     </div>
 
@@ -632,7 +632,7 @@
                   Ambient Listening Room:
                 </span>
                 <span className="text-xs font-sans text-[#59473A] hidden sm:inline">
-                  Built with in-browser Web Audio synthesis for serene workspace focus.
+                  Built with in-browser Web Audio synthesis for serene focus.
                 </span>
               </div>
 
@@ -679,7 +679,7 @@
               <p className="text-xs font-sans uppercase tracking-[0.25em] text-[#936647] font-medium">Curated Provisions</p>
               <h2 className="text-3xl md:text-5xl font-serif text-[#292019] font-normal">Our Artisanal Offerings</h2>
               <p className="text-[#6C5B4E] font-sans text-sm md:text-base leading-relaxed font-light">
-                Every cup is dialed each morning to optimal extraction. Pastries are freshly pulled from the hearth oven by 6:45 AM.
+                Recipes and single-origin profiles designed for our future roastery. Explore our handcrafted lineup.
               </p>
 
               {/* Category Filter Pills */}
@@ -771,7 +771,7 @@
                         className="bg-[#EFE8DE] hover:bg-[#34271F] hover:text-[#FDFBF7] text-[#473629] text-xs font-sans px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 active:scale-95 border border-[#DECFC1]"
                       >
                         <Icon name="plus" className="w-3.5 h-3.5" />
-                        <span>Add to Order</span>
+                        <span>Add to Tray</span>
                       </button>
                     </div>
                   </div>
@@ -790,7 +790,7 @@
                     We believe coffee should feel like reading the final chapter of a favorite book.
                   </h2>
                   <p className="text-[#655346] font-sans text-sm md:text-base leading-relaxed font-light">
-                    Our roastery was founded on the idea that the sensory rituals of a morning coffee should be peaceful, thoughtful, and unhurried. We roast in modest 5-kilo batches to honor the nuances coaxed from high-altitude shade-grown harvests.
+                    Our roastery was founded on the idea that the sensory rituals of a coffee experience should be peaceful, thoughtful, and unhurried. We are fine-tuning our roasting blends and slow bakery methods ahead of our brick-and-mortar debut.
                   </p>
 
                   <div className="pt-2 flex items-center gap-4">
@@ -799,7 +799,7 @@
                         "Coffee is not merely fuel for speed; it is an invitation to inhabit the current minute."
                       </p>
                       <p className="text-[11px] font-sans text-[#836D5B] mt-1 uppercase tracking-wider">
-                        — Henriette & Clara, Head Roasters
+                        — L'Aura Roasters
                       </p>
                     </div>
                   </div>
@@ -827,13 +827,13 @@
             </div>
           </section>
 
-          {/* Atmosphere & Gallery Section */}
+          {/* Atmosphere Section */}
           <section id="atmosphere" className="py-24 max-w-6xl mx-auto px-6">
             <div className="text-center max-w-xl mx-auto mb-16 space-y-2">
-              <p className="text-xs font-sans uppercase tracking-[0.25em] text-[#936647] font-medium">Moments Captured</p>
+              <p className="text-xs font-sans uppercase tracking-[0.25em] text-[#936647] font-medium">Visual Moodboard</p>
               <h2 className="text-3xl md:text-4xl font-serif text-[#292019]">Sunlight, Shelves & Steam</h2>
               <p className="text-xs font-sans text-[#6F5E51]">
-                Polaroids pinned around our espresso bar from mornings past.
+                The aesthetic vision driving our upcoming physical space.
               </p>
             </div>
 
@@ -872,9 +872,9 @@
                     {[...Array(5)].map((_, i) => <Icon key={i} name="star" className="w-3.5 h-3.5 fill-current" />)}
                   </div>
                   <p className="text-sm font-serif italic text-[#F1E8DC]">
-                    "The Smoked Vanilla Cortado with their hearth hazelnut croissant is my Saturday morning sanctuary."
+                    "Can't wait for the physical doors to open. The concept and aesthetic vision are breathtaking."
                   </p>
-                  <p className="text-xs font-sans text-[#A49282] uppercase tracking-wider">— Elena R., Local Illustrator</p>
+                  <p className="text-xs font-sans text-[#A49282] uppercase tracking-wider">— Community Supporter</p>
                 </div>
 
                 <div className="space-y-2 border-b md:border-b-0 md:border-r border-[#4A3B31] pb-6 md:pb-0 md:pr-6">
@@ -882,9 +882,9 @@
                     {[...Array(5)].map((_, i) => <Icon key={i} name="star" className="w-3.5 h-3.5 fill-current" />)}
                   </div>
                   <p className="text-sm font-serif italic text-[#F1E8DC]">
-                    "A rare cafe that actually treats ambient acoustics and seating textures with the same reverence as their Geisha brews."
+                    "Treating ambient acoustics, gentle ceramics, and specialty roasting with intentional focus."
                   </p>
-                  <p className="text-xs font-sans text-[#A49282] uppercase tracking-wider">— Julien M., Architect</p>
+                  <p className="text-xs font-sans text-[#A49282] uppercase tracking-wider">— Coffee Enthusiast</p>
                 </div>
 
                 <div className="space-y-2">
@@ -892,48 +892,52 @@
                     {[...Array(5)].map((_, i) => <Icon key={i} name="star" className="w-3.5 h-3.5 fill-current" />)}
                   </div>
                   <p className="text-sm font-serif italic text-[#F1E8DC]">
-                    "Natural daylight, the smell of freshly roasted cardamom espresso, and total tranquility for writing."
+                    "Looking forward to serene weekend work sessions and slow-poured espresso flights."
                   </p>
-                  <p className="text-xs font-sans text-[#A49282] uppercase tracking-wider">— Sarah T., Author</p>
+                  <p className="text-xs font-sans text-[#A49282] uppercase tracking-wider">— Early Patron</p>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Location & Roaster Schedule */}
+          {/* Location & Contact Section */}
           <section id="visit" className="py-20 bg-[#F4EDE2]/50 border-t border-[#E8DECFA]">
             <div className="max-w-6xl mx-auto px-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div className="space-y-6">
-                  <span className="text-xs font-sans uppercase tracking-[0.25em] text-[#936647] font-medium">Find Us</span>
-                  <h2 className="text-3xl md:text-4xl font-serif text-[#292019]">Join Us for a Poured Cup</h2>
+                  <span className="text-xs font-sans uppercase tracking-[0.25em] text-[#936647] font-medium">Get in Touch</span>
+                  <h2 className="text-3xl md:text-4xl font-serif text-[#292019]">Connect with L’Aura</h2>
                   <p className="text-[#655346] font-sans text-sm md:text-base leading-relaxed font-light">
-                    Nestled inside the brick courtyard behind the Old Botanical Conservatory. Bicycle racks and shaded reading benches available under the wisteria trellis.
+                    While we prepare our brick-and-mortar doors, we are actively roasting, testing signature blends, and building our community. Reach out for collaborations or early cupping inquiries.
                   </p>
 
                   <div className="space-y-4 pt-2 font-sans text-sm">
+                    {/* Location in Progress */}
                     <div className="flex items-start gap-3">
                       <Icon name="map-pin" className="w-5 h-5 text-[#A85B32] shrink-0 mt-0.5" />
                       <div>
-                        <p className="font-medium text-[#2E231C]">242 Hawthorne Terrace (Courtyard Nook)</p>
-                        <p className="text-xs text-[#7B6A5C]">West District, Old Conservatory Arcade</p>
+                        <p className="font-medium text-[#2E231C]">Physical Storefront: In Development</p>
+                        <p className="text-xs text-[#7B6A5C]">Location details and launch date will be announced soon</p>
                       </div>
                     </div>
 
+                    {/* Working Hours */}
                     <div className="flex items-start gap-3">
                       <Icon name="clock" className="w-5 h-5 text-[#A85B32] shrink-0 mt-0.5" />
                       <div>
-                        <p className="font-medium text-[#2E231C]">Monday – Friday: 7:00 AM – 6:30 PM</p>
-                        <p className="text-xs text-[#7B6A5C]">Saturday – Sunday: 8:00 AM – 7:00 PM</p>
-                        <p className="text-[11px] text-[#A85B32] mt-0.5">Bakery warms fresh at 7:00 AM & 12:30 PM</p>
+                        <p className="font-medium text-[#2E231C]">Monday – Sunday: 7:00 AM – 10:00 PM</p>
+                        <p className="text-xs text-[#7B6A5C]">Online inquiries, roast dispatch & tastings support</p>
                       </div>
                     </div>
 
+                    {/* Official Contact Email */}
                     <div className="flex items-start gap-3">
                       <Icon name="mail" className="w-5 h-5 text-[#A85B32] shrink-0 mt-0.5" />
                       <div>
-                        <p className="font-medium text-[#2E231C]">bonjour@lauracafe.com</p>
-                        <p className="text-xs text-[#7B6A5C]">For private roastery tastings and book club events</p>
+                        <a href="mailto:lauracaferoastery@gmail.com" className="font-medium text-[#2E231C] hover:text-[#A85B32] underline decoration-[#DEC0A4] transition-colors">
+                          lauracaferoastery@gmail.com
+                        </a>
+                        <p className="text-xs text-[#7B6A5C]">General inquiries, catering, and early tasting registrations</p>
                       </div>
                     </div>
                   </div>
@@ -943,49 +947,50 @@
                       onClick={() => setIsReserveOpen(true)}
                       className="bg-[#2D231C] text-[#FAF6F0] px-6 py-3 rounded-full text-xs font-sans tracking-wide hover:bg-[#45362B] transition-all shadow"
                     >
-                      Reserve A Corner Nook
+                      Join Early Tasting Access List
                     </button>
                   </div>
                 </div>
 
+                {/* Roastery Development Status Card */}
                 <div className="bg-[#FFFDFB] p-8 rounded-3xl border border-[#EDE2D4] shadow-md space-y-6">
                   <div className="flex items-center justify-between border-b border-[#F2ECE3] pb-4">
                     <div>
-                      <h4 className="font-serif text-lg text-[#2D231C]">Daily Roastery Schedule</h4>
-                      <p className="text-xs font-sans text-[#8C7A6D]">Dialing in flavors every morning</p>
+                      <h4 className="font-serif text-lg text-[#2D231C]">Project Roadmap</h4>
+                      <p className="text-xs font-sans text-[#8C7A6D]">Building the L'Aura vision step-by-step</p>
                     </div>
-                    <span className="w-3 h-3 rounded-full bg-[#52824D] animate-ping" />
+                    <span className="w-3 h-3 rounded-full bg-[#D48955] animate-ping" />
                   </div>
 
                   <div className="space-y-3 font-sans text-xs">
                     <div className="flex justify-between p-3 rounded-xl bg-[#FAF6F0] border border-[#EFE7DC]">
                       <div>
-                        <p className="font-semibold text-[#3E3025]">Morning Cupping & Dial-in</p>
-                        <p className="text-[#7F6E60]">Espresso extraction calibration</p>
+                        <p className="font-semibold text-[#3E3025]">Phase 1: Brand & Recipe Development</p>
+                        <p className="text-[#7F6E60]">Curating single-origin beans & menu formulation</p>
                       </div>
-                      <span className="font-mono text-[#8E5E3D]">7:00 AM</span>
+                      <span className="font-semibold text-[#4F7C49]">Active</span>
                     </div>
 
                     <div className="flex justify-between p-3 rounded-xl bg-[#FAF6F0] border border-[#EFE7DC]">
                       <div>
-                        <p className="font-semibold text-[#3E3025]">Slow Hearth Sourdough Pull</p>
-                        <p className="text-[#7F6E60]">Warm croissants and brioches</p>
+                        <p className="font-semibold text-[#3E3025]">Phase 2: Private Pop-Ups & Cupping</p>
+                        <p className="text-[#7F6E60]">Exclusive small-batch community tastings</p>
                       </div>
-                      <span className="font-mono text-[#8E5E3D]">7:30 AM</span>
+                      <span className="font-semibold text-[#8E5E3D]">Upcoming</span>
                     </div>
 
                     <div className="flex justify-between p-3 rounded-xl bg-[#FAF6F0] border border-[#EFE7DC]">
                       <div>
-                        <p className="font-semibold text-[#3E3025]">Micro-Batch Drum Roasting</p>
-                        <p className="text-[#7F6E60]">Open viewing at roaster bar</p>
+                        <p className="font-semibold text-[#3E3025]">Phase 3: Flagship Storefront Launch</p>
+                        <p className="text-[#7F6E60]">Physical cafe, espresso bar & open roastery hearth</p>
                       </div>
-                      <span className="font-mono text-[#8E5E3D]">2:00 PM</span>
+                      <span className="font-mono text-[#7B6A5C]">Planning</span>
                     </div>
                   </div>
 
                   <div className="p-4 rounded-xl bg-[#F6F0E6] text-[#695646] text-xs font-sans flex items-center gap-3">
                     <Icon name="bookmark" className="w-4 h-4 text-[#A85B32] shrink-0" />
-                    <span>Borrow a paperback from our community bookshelves; return whenever finished.</span>
+                    <span>Follow along as we brew the dream from the ground up.</span>
                   </div>
                 </div>
               </div>
@@ -1001,16 +1006,16 @@
                     <div className="w-8 h-8 rounded-full bg-[#3B2D23] flex items-center justify-center text-[#E3B07D]">
                       <Icon name="coffee" className="w-4 h-4" />
                     </div>
-                    <span className="text-xl font-serif text-[#FAF6F0]">L’Aura Café</span>
+                    <span className="text-xl font-serif text-[#FAF6F0]">L’Aura Café & Roastery</span>
                   </div>
                   <p className="text-xs text-[#A8988A] leading-relaxed font-light">
-                    An ode to slow living, ethical bean sourcing, and morning warmth. Handcrafted daily in our courtyard roastery.
+                    An ode to slow living, ethical bean sourcing, and morning warmth. Building our future cafe step by step.
                   </p>
                   <div className="flex items-center gap-3 text-[#B8A696] pt-1">
-                    <a href="#instagram" className="p-2 rounded-full bg-[#352920] hover:text-white transition-colors" title="Instagram">
+                    <a href="https://instagram.com" target="_blank" rel="noreferrer" className="p-2 rounded-full bg-[#352920] hover:text-white transition-colors" title="Instagram">
                       <Icon name="instagram" className="w-4 h-4" />
                     </a>
-                    <a href="#mail" className="p-2 rounded-full bg-[#352920] hover:text-white transition-colors" title="Contact Us">
+                    <a href="mailto:lauracaferoastery@gmail.com" className="p-2 rounded-full bg-[#352920] hover:text-white transition-colors" title="Contact Email">
                       <Icon name="mail" className="w-4 h-4" />
                     </a>
                   </div>
@@ -1019,27 +1024,27 @@
                 <div className="md:col-span-2 space-y-3">
                   <p className="text-xs uppercase tracking-widest text-[#D3A06E] font-medium">Explore</p>
                   <ul className="text-xs space-y-2 text-[#A8988A]">
-                    <li><a href="#menu" className="hover:text-white transition-colors">Menu Catalog</a></li>
+                    <li><a href="#menu" className="hover:text-white transition-colors">Menu Concepts</a></li>
                     <li><a href="#philosophy" className="hover:text-white transition-colors">Bean Origins</a></li>
-                    <li><a href="#atmosphere" className="hover:text-white transition-colors">The Courtyard</a></li>
-                    <li><button onClick={() => setIsReserveOpen(true)} className="hover:text-white transition-colors">Reservations</button></li>
+                    <li><a href="#atmosphere" className="hover:text-white transition-colors">Vision</a></li>
+                    <li><button onClick={() => setIsReserveOpen(true)} className="hover:text-white transition-colors">Tasting Access</button></li>
                   </ul>
                 </div>
 
                 <div className="md:col-span-2 space-y-3">
-                  <p className="text-xs uppercase tracking-widest text-[#D3A06E] font-medium">Roastery</p>
+                  <p className="text-xs uppercase tracking-widest text-[#D3A06E] font-medium">Schedule</p>
                   <ul className="text-xs space-y-2 text-[#A8988A]">
-                    <li>Direct Trade Partners</li>
-                    <li>Cold Drip Towers</li>
-                    <li>Ceramics & Mugs</li>
-                    <li>Barista Masterclasses</li>
+                    <li>Mon – Sun: 7 AM – 10 PM</li>
+                    <li>Online Roasting Lab</li>
+                    <li>Custom Microlot Orders</li>
+                    <li>lauracaferoastery@gmail.com</li>
                   </ul>
                 </div>
 
                 <div className="md:col-span-4 space-y-3">
                   <p className="text-xs uppercase tracking-widest text-[#D3A06E] font-medium">Sunday Morning Postcards</p>
                   <p className="text-xs text-[#A8988A] leading-relaxed">
-                    Receive our monthly coffee bean cupping notes, seasonal bakery releases, and quiet playlist curations.
+                    Receive our monthly coffee bean cupping notes, development milestones, and early pop-up announcements.
                   </p>
                   <form 
                     onSubmit={(e) => {
@@ -1145,7 +1150,7 @@
                       className="flex-1 bg-[#2F231B] hover:bg-[#433427] text-[#FAF6F0] py-3 rounded-full font-sans text-xs font-medium tracking-wide transition-all shadow flex items-center justify-center gap-2"
                     >
                       <Icon name="shopping-bag" className="w-4 h-4" />
-                      <span>Add to Order Tray (${activeModalItem.price.toFixed(2)})</span>
+                      <span>Add to Tray Preview (${activeModalItem.price.toFixed(2)})</span>
                     </button>
 
                     <button
@@ -1165,7 +1170,7 @@
             </div>
           )}
 
-          {/* Reservation Modal */}
+          {/* Early Access / Waitlist Modal */}
           {isReserveOpen && (
             <div className="fixed inset-0 z-50 bg-[#1B140F]/65 backdrop-blur-sm flex items-center justify-center p-4">
               <div 
@@ -1184,21 +1189,21 @@
                     <div className="w-14 h-14 bg-[#EEF5EC] text-[#4F7C49] rounded-full flex items-center justify-center mx-auto shadow-inner">
                       <Icon name="check" className="w-7 h-7 stroke-[2.5]" />
                     </div>
-                    <h3 className="font-serif text-2xl text-[#2B2119]">Your Table Awaits</h3>
+                    <h3 className="font-serif text-2xl text-[#2B2119]">You're on the Guest List</h3>
                     <p className="text-xs md:text-sm font-sans text-[#6B5A4D] max-w-xs mx-auto">
-                      A corner table in the {reserveForm.tableType} has been reserved for {reserveForm.name}. A confirmation email was dispatched.
+                      Thank you, {reserveForm.name}! You will receive exclusive early invitations when we host community pop-up tastings and unveil our storefront.
                     </p>
                     <div className="pt-2 text-[11px] font-sans text-[#8C7A6D]">
-                      We keep reserved tables held for 15 minutes past scheduled time.
+                      Questions? Write to us directly at lauracaferoastery@gmail.com
                     </div>
                   </div>
                 ) : (
                   <form onSubmit={handleReserveSubmit} className="space-y-4 font-sans">
                     <div className="space-y-1">
-                      <span className="text-[10px] uppercase tracking-widest text-[#9A6A47] font-semibold">Table Hospitality</span>
-                      <h3 className="font-serif text-2xl text-[#2B2119]">Reserve A Quiet Space</h3>
+                      <span className="text-[10px] uppercase tracking-widest text-[#9A6A47] font-semibold">Community Tasting</span>
+                      <h3 className="font-serif text-2xl text-[#2B2119]">Early Access & Tasting Waitlist</h3>
                       <p className="text-xs text-[#715E50] font-light">
-                        Select your preferred setting for morning espresso flights or afternoon work.
+                        Leave your details to receive private invitations to test roasts, bakery pop-ups, and our official opening.
                       </p>
                     </div>
 
@@ -1208,7 +1213,7 @@
                         <input 
                           type="text"
                           required
-                          placeholder="Genevieve Marchand"
+                          placeholder="Your Name"
                           value={reserveForm.name}
                           onChange={(e) => setReserveForm({...reserveForm, name: e.target.value})}
                           className="w-full bg-[#FAF7F2] border border-[#DDD0C0] rounded-xl px-3 py-2 text-xs text-[#2F231A] focus:outline-none focus:border-[#A85B32]"
@@ -1220,7 +1225,7 @@
                         <input 
                           type="email"
                           required
-                          placeholder="genevieve@atelier.com"
+                          placeholder="name@example.com"
                           value={reserveForm.email}
                           onChange={(e) => setReserveForm({...reserveForm, email: e.target.value})}
                           className="w-full bg-[#FAF7F2] border border-[#DDD0C0] rounded-xl px-3 py-2 text-xs text-[#2F231A] focus:outline-none focus:border-[#A85B32]"
@@ -1228,66 +1233,40 @@
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label className="text-[11px] font-medium text-[#5E4E41] block mb-1">Date</label>
-                        <input 
-                          type="date"
-                          value={reserveForm.date}
-                          onChange={(e) => setReserveForm({...reserveForm, date: e.target.value})}
+                        <label className="text-[11px] font-medium text-[#5E4E41] block mb-1">Preferred Experience</label>
+                        <select
+                          value={reserveForm.tableType}
+                          onChange={(e) => setReserveForm({...reserveForm, tableType: e.target.value})}
                           className="w-full bg-[#FAF7F2] border border-[#DDD0C0] rounded-xl px-3 py-2 text-xs text-[#2F231A] focus:outline-none focus:border-[#A85B32]"
-                        />
+                        >
+                          <option>Micro-Batch Coffee Tasting</option>
+                          <option>Artisan Bakery Pairing</option>
+                          <option>Grand Opening Event Invitation</option>
+                          <option>Home Brew Masterclass</option>
+                        </select>
                       </div>
 
                       <div>
-                        <label className="text-[11px] font-medium text-[#5E4E41] block mb-1">Time Slot</label>
+                        <label className="text-[11px] font-medium text-[#5E4E41] block mb-1">Contact Hours</label>
                         <select
                           value={reserveForm.time}
                           onChange={(e) => setReserveForm({...reserveForm, time: e.target.value})}
                           className="w-full bg-[#FAF7F2] border border-[#DDD0C0] rounded-xl px-3 py-2 text-xs text-[#2F231A] focus:outline-none focus:border-[#A85B32]"
                         >
-                          <option>8:30 AM (Morning Sun)</option>
-                          <option>10:30 AM (Warm Pastry Rush)</option>
-                          <option>1:00 PM (Quiet Lunch)</option>
-                          <option>3:30 PM (Acoustic Afternoon)</option>
-                          <option>5:00 PM (Golden Hour)</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="text-[11px] font-medium text-[#5E4E41] block mb-1">Party</label>
-                        <select
-                          value={reserveForm.guests}
-                          onChange={(e) => setReserveForm({...reserveForm, guests: e.target.value})}
-                          className="w-full bg-[#FAF7F2] border border-[#DDD0C0] rounded-xl px-3 py-2 text-xs text-[#2F231A] focus:outline-none focus:border-[#A85B32]"
-                        >
-                          <option>1 Guest (Solo Reading)</option>
-                          <option>2 Guests</option>
-                          <option>3-4 Guests</option>
-                          <option>5+ Guests (Garden Bench)</option>
+                          <option>Morning (7:00 AM – 12:00 PM)</option>
+                          <option>Afternoon (12:00 PM – 5:00 PM)</option>
+                          <option>Evening (5:00 PM – 10:00 PM)</option>
                         </select>
                       </div>
                     </div>
 
                     <div>
-                      <label className="text-[11px] font-medium text-[#5E4E41] block mb-1">Seating Atmosphere</label>
-                      <select
-                        value={reserveForm.tableType}
-                        onChange={(e) => setReserveForm({...reserveForm, tableType: e.target.value})}
-                        className="w-full bg-[#FAF7F2] border border-[#DDD0C0] rounded-xl px-3 py-2 text-xs text-[#2F231A] focus:outline-none focus:border-[#A85B32]"
-                      >
-                        <option>Window Nook with Natural Light</option>
-                        <option>Botanical Garden Trellis (Outdoor)</option>
-                        <option>Bookshelf Library Table</option>
-                        <option>Barista Slow-Drip Counter</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="text-[11px] font-medium text-[#5E4E41] block mb-1">Special Whispers / Dietary Notes (Optional)</label>
+                      <label className="text-[11px] font-medium text-[#5E4E41] block mb-1">Any Notes or Coffee Preferences (Optional)</label>
                       <textarea 
                         rows={2}
-                        placeholder="e.g. Celebrating a quiet anniversary; gluten sensitive..."
+                        placeholder="e.g. Love light roast pour overs; oat milk enthusiast..."
                         value={reserveForm.note}
                         onChange={(e) => setReserveForm({...reserveForm, note: e.target.value})}
                         className="w-full bg-[#FAF7F2] border border-[#DDD0C0] rounded-xl px-3 py-2 text-xs text-[#2F231A] focus:outline-none focus:border-[#A85B32]"
@@ -1299,7 +1278,7 @@
                         type="submit"
                         className="w-full bg-[#2F231A] hover:bg-[#433326] text-[#FAF6F0] py-3 rounded-full text-xs font-medium tracking-wide transition-all shadow"
                       >
-                        Confirm Table Reservation
+                        Join Tasting Waitlist
                       </button>
                     </div>
                   </form>
@@ -1336,7 +1315,7 @@
                       </div>
                       <p className="font-serif text-lg text-[#32271F]">Your tray is waiting</p>
                       <p className="text-xs text-[#7B6A5C] max-w-xs mx-auto">
-                        Add a single-origin pour-over or a freshly warm hearth croissant to begin.
+                        Add a single-origin pour-over or a freshly warm hearth croissant to explore our menu.
                       </p>
                       <button
                         onClick={() => setIsCartOpen(false)}
@@ -1393,25 +1372,25 @@
                         <span>${cartTotal.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span>Barista Roastery Tax (5%)</span>
+                        <span>Estimated Tax (5%)</span>
                         <span>${(cartTotal * 0.05).toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between text-sm font-semibold text-[#292019] pt-2 border-t border-[#E4D7C8]">
-                        <span>Total Order</span>
+                        <span>Total Order Preview</span>
                         <span>${(cartTotal * 1.05).toFixed(2)}</span>
                       </div>
                     </div>
 
                     <button
                       onClick={() => {
-                        showToast('☕ Order placed! Preparing your tray at the bar.');
+                        showToast('☕ Sample order saved! Full checkout active at launch.');
                         setCart([]);
                         setIsCartOpen(false);
                       }}
                       className="w-full bg-[#2E221A] hover:bg-[#433428] text-[#F9F5EE] py-3.5 rounded-full text-xs font-medium tracking-wide transition-all shadow flex items-center justify-center gap-2"
                     >
                       <Icon name="check" className="w-4 h-4" />
-                      <span>Send Order to Espresso Bar (${(cartTotal * 1.05).toFixed(2)})</span>
+                      <span>Save Tasting Tray Preview (${(cartTotal * 1.05).toFixed(2)})</span>
                     </button>
                   </div>
                 )}
